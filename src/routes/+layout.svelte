@@ -1,8 +1,26 @@
-<script>
+<script lang="ts">
+    import { supabase } from '$lib/supabaseClient'
+    import { invalidate } from '$app/navigation'
+    import { onMount } from 'svelte'
     import "../app.css";
+
+    onMount(() => {
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange(() => {
+            invalidate('supabase:auth')
+        })
+
+        return () => {
+            subscription.unsubscribe()
+        }
+    })
 </script>
 
 <svelte:head>
+    <!-- META -->
+    <title>MonsterBox</title>
+
     <!-- FAVICONS -->
     <link rel="apple-touch-icon" sizes="180x180" href="/imgs/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/imgs/favicons/favicon-32x32.png">
