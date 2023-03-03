@@ -14,6 +14,11 @@
     <meta name="msapplication-TileImage" content="/imgs/favicons/mstile-150x150.png">
     <meta name="msapplication-config" content="/imgs/favicons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+
+    <!-- CSS -->
+    <link href="/ext/fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="/ext/fontawesome/css/brands.css" rel="stylesheet">
+    <link href="/ext/fontawesome/css/solid.css" rel="stylesheet">
 </svelte:head>
 
 <slot />
