@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { PUBLIC_PAGE_BASE } from '$env/static/public'
+	import { Alerts } from '$components/alert';
+	import { addAlert } from '$components/alert/alertStore';
 	import PageData = App.PageData;
 
 	export let data: PageData;
@@ -22,10 +24,12 @@
 			if (response.error)
 				throw response.error
 			buttonText = "Sent!"
+			addAlert("Magic Link sent. Check your Emails!", true)
 		}
 		catch (error)
 		{
 			buttonText = "Sending failed"
+			addAlert("An error occured. Please try again later!", false)
 		}
 		finally
 		{
@@ -33,6 +37,8 @@
 		}
 	}
 </script>
+
+<Alerts/>
 
 <div class="flex w-screen h-screen">
 	<div class="m-auto">
