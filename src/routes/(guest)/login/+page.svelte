@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { supabase } from '$lib/supabaseClient'
 	import { PUBLIC_PAGE_BASE } from '$env/static/public'
+	import PageData = App.PageData;
+
+	export let data: PageData;
 
 	let buttonText = "Login"
 	let loading = false
@@ -11,7 +13,7 @@
 		{
 			buttonText = "Sending..."
 			loading = true
-			const response = await supabase.auth.signInWithOtp({
+			const response = await data.supabase.auth.signInWithOtp({
 				email: email,
 				options: {
 					emailRedirectTo: PUBLIC_PAGE_BASE + 'login_request'
@@ -19,15 +21,14 @@
 			})
 			if (response.error)
 				throw response.error
+			buttonText = "Sent!"
 		}
 		catch (error)
 		{
 			buttonText = "Sending failed"
-			loading = false
 		}
 		finally
 		{
-			buttonText = "Sent!"
 			loading = false
 		}
 	}
