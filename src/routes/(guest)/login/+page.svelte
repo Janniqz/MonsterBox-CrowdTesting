@@ -21,15 +21,17 @@
 					emailRedirectTo: PUBLIC_PAGE_BASE + 'login_request'
 				}
 			})
+
 			if (response.error)
 				throw response.error
+
 			buttonText = "Sent!"
 			addAlert("Magic Link sent. Check your Emails!", true)
 		}
 		catch (error)
 		{
 			buttonText = "Sending failed"
-			addAlert("An error occured. Please try again later!", false)
+			addAlert("An error occurred. Please try again later!", false)
 		}
 		finally
 		{

@@ -1,5 +1,6 @@
 import { Session, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '$lib/supabaseTypes';
+import type { User } from '$components/userManagement/userStore';
 
 declare global {
 	namespace App {
@@ -9,8 +10,8 @@ declare global {
 			getSession(): Promise<Session | null>
 		}
 		interface PageData {
-			supabase: SupabaseClient<Database>;
 			session: Session | null;
+			user: User | null;
 		}
 		// interface Platform {}
 	}
