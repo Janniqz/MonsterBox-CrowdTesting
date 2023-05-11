@@ -6,7 +6,7 @@
 	export let alertValues: Alert
 
 	function handleDismiss() {
-		removeAlert(alertValues)
+		removeAlert()
 	}
 </script>
 
