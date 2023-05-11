@@ -18,20 +18,15 @@ export async function setSession(supabase: SupabaseClient, event: AuthChangeEven
 		if (currentSession != null)
 		{
 			sessionStore.set(null)
-			await invalidate('supabase:auth')
+			if (event == 'SIGNED_OUT')
+				addAlert("Successfully signed out!", true)
 		}
 		return;
 	}
 
 	if (session.access_token !== currentSession?.access_token) {
 		sessionStore.set(session);
-		await invalidate('supabase:auth')
-
-		// Send fitting Alert
-		if (event == 'SIGNED_IN')
-			addAlert("Successfully signed in!", true)
-		else if (event == 'SIGNED_OUT')
-			addAlert("Successfully signed out!", true)
+		addAlert("Successfully signed in!", true)
 	}
 }
 

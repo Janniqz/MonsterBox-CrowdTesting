@@ -6,18 +6,16 @@
     import { setSession } from '$components/userManagement/userStore';
 
     export let data: LayoutData;
-
-    $: ({ supabase, session } = data);
+    export let { supabase, session } = data;
 
     onMount(() => {
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((event, _session) => {
+            setSession(supabase, event, _session);
             if (_session?.expires_at !== session?.expires_at) {
                 invalidate('supabase:auth');
             }
-            if (event !== "INITIAL_SESSION")
-                setSession(supabase, event, _session);
         });
 
         return () => subscription.unsubscribe();
