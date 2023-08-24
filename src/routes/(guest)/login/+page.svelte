@@ -4,6 +4,9 @@
 	import { addAlert } from '$components/alert/alertStore';
 	import { fade } from 'svelte/transition';
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 
@@ -24,7 +27,7 @@
 			const response = await data.supabase.auth.signInWithOtp({
 				email: email,
 				options: {
-					emailRedirectTo: PUBLIC_PAGE_BASE + 'login_request'
+					emailRedirectTo: `${location.origin}/auth/callback`
 				}
 			})
 
@@ -41,6 +44,13 @@
 			addAlert("An error occurred. Please try again later!", false)
 		}
 	}
+
+	onMount(() => {
+		let params = new URLSearchParams($page.url.hash.substring(1));
+		if (params.has('error')) {
+			addAlert(params.get('error_description')!, false);
+		}
+	})
 </script>
 
 <Alerts/>
