@@ -245,3 +245,4 @@ package
 /build
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+supabase
