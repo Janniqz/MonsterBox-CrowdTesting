@@ -2,7 +2,7 @@
 	import Accordion from '$components/Accordion.svelte';
 	import { page } from '$app/stores';
 
-	export let data = $page.data;
+	export let { feedback, redeemed, running } = $page.data;
 
 </script>
 
@@ -11,25 +11,31 @@
 		<Accordion>
 			<span slot='title'>Available Promotions</span>
 			<slot slot='content'>
-				{#each data.running as { promotion_id, promotion_name, claimed }}
-					{promotion_id} {promotion_name} {claimed}
-				{/each}
+				{#if (running !== null)}
+					{#each running as { promotion_id, promotion_name, promotion_description, claimed }}
+						{promotion_id} {promotion_name} {promotion_description} {claimed}
+					{/each}
+				{/if}
 			</slot>
 		</Accordion>
 		<Accordion>
 			<span slot='title'>Awaiting Feedback</span>
 			<span slot='content'>
-				{#each data.feedback as { promotion_id, promotion_name, key_id }}
-					{promotion_id} {promotion_name} {key_id}
-				{/each}
+				{#if (feedback !== null)}
+					{#each feedback as { promotion_name, key_id }}
+						{promotion_name} {key_id}
+					{/each}
+				{/if}
 			</span>
 		</Accordion>
 		<Accordion>
 			<span slot='title'>Redeemed Keys</span>
 			<span slot='content'>
-				{#each data.redeemed as { promotion_name, key }}
-					{promotion_name} {key}
-				{/each}
+				{#if (redeemed !== null)}
+					{#each redeemed as { promotion_name, key_id, feedback_given }}
+						{promotion_name} {key_id} {feedback_given}
+					{/each}
+				{/if}
 			</span>
 		</Accordion>
 	</div>

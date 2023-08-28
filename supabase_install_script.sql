@@ -26,6 +26,30 @@ CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
+CREATE TYPE "public"."feedback_info" AS (
+	"promotion_name" "text",
+	"key_id" bigint
+);
+
+ALTER TYPE "public"."feedback_info" OWNER TO "postgres";
+
+CREATE TYPE "public"."promotion_info" AS (
+	"promotion_id" bigint,
+	"promotion_name" "text",
+	"promotion_description" "text",
+	"claimed" boolean
+);
+
+ALTER TYPE "public"."promotion_info" OWNER TO "postgres";
+
+CREATE TYPE "public"."redeemed_info" AS (
+	"promotion_name" "text",
+	"key_id" bigint,
+	"feedback_given" boolean
+);
+
+ALTER TYPE "public"."redeemed_info" OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."claim_key"("promotion_id" bigint) RETURNS boolean
     LANGUAGE "plpgsql"
     AS $$
@@ -77,7 +101,7 @@ $$;
 
 ALTER FUNCTION "public"."claim_key"("promotion_id" bigint) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_awaiting_feedback"() RETURNS SETOF "record"
+CREATE OR REPLACE FUNCTION "public"."get_awaiting_feedback"() RETURNS SETOF "public"."feedback_info"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -85,37 +109,34 @@ BEGIN
     SELECT
       p.name as promotion_name,
       k.key_id as key_id
-    FROM
-      public.keys k
-      JOIN public.promotions p ON k.promotion_id = p.promotion_id
-    WHERE
-      k.claimed_by = auth.uid() AND
-      k.feedback_given = false;
+    FROM public.keys k
+    JOIN public.promotions p ON k.promotion_id = p.promotion_id
+    WHERE k.claimed_by = auth.uid()
+    AND k.feedback_given = false;
 END;
 $$;
 
 ALTER FUNCTION "public"."get_awaiting_feedback"() OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_redeemed"() RETURNS SETOF "record"
+CREATE OR REPLACE FUNCTION "public"."get_redeemed"() RETURNS SETOF "public"."redeemed_info"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
     RETURN QUERY
     SELECT
       p.name as promotion_name,
-      k.key as key,
+      k.key_id as key_id,
       k.feedback_given as feedback_given
-    FROM
-      public.keys k
+    FROM public.keys k
     JOIN public.promotions p ON k.promotion_id = p.promotion_id
-    WHERE
-      k.claimed_by = auth.uid();
+    WHERE k.claimed_by = auth.uid()
+    AND k.claimed = true;
 END;
 $$;
 
 ALTER FUNCTION "public"."get_redeemed"() OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_running_promotions"() RETURNS SETOF "record"
+CREATE OR REPLACE FUNCTION "public"."get_running_promotions"() RETURNS SETOF "public"."promotion_info"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
