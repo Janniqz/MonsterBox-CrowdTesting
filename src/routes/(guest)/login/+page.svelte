@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { PUBLIC_PAGE_BASE } from '$env/static/public'
 	import { Alerts } from '$components/alert';
 	import { addAlert } from '$components/alert/alertStore';
 	import { fade } from 'svelte/transition';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
-
 	export let data: PageData;
 
 	let buttonText = "Login"
