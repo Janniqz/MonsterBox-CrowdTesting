@@ -22,7 +22,7 @@
 		<div class="transition-all duration-300 ease-in-out"
 			 in:fade={{ duration: 500, easing: cubicInOut }}
 			 out:fade={{ duration: 500, easing: cubicInOut }}>
-			<div class="p-4 text-sm leading-normal text-blue-gray-500/80">
+			<div class="px-4 pt-4 text-sm leading-normal text-blue-gray-500/80">
 				<slot name='content' />
 			</div>
 		</div>

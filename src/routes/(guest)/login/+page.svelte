@@ -5,6 +5,7 @@
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+
 	export let data: PageData;
 
 	let buttonText = "Login"
