@@ -15,8 +15,8 @@
 			<span slot='title'>Available Promotions</span>
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(running) && running.length)}
-					{#each running as { promotion_id, promotion_name, promotion_description, promotion_expiry_date, promotion_claimed }}
-						<PromotionSlot data={$page.data} {promotion_id} {promotion_name} {promotion_description} {promotion_expiry_date} {promotion_claimed}/>
+					{#each running as promotionData}
+						<PromotionSlot data={$page.data} {...promotionData}/>
 					{/each}
 				{:else}
 					No running Promotions!
@@ -27,8 +27,8 @@
 			<span slot='title'>Awaiting Feedback</span>
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(feedback) && feedback.length)}
-					{#each feedback as { promotion_name, key_id }}
-						<FeedbackSlot {promotion_name} {key_id}/>
+					{#each feedback as feedbackData}
+						<FeedbackSlot {...feedbackData}/>
 					{/each}
 				{:else}
 					There are no promotions awaiting feedback!
@@ -39,8 +39,8 @@
 			<span slot='title'>Redeemed Keys</span>
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(redeemed) && redeemed.length)}
-					{#each redeemed as { promotion_name, key, feedback_given }}
-						<RedeemedSlot {promotion_name} {key} {feedback_given} />
+					{#each redeemed as redeemedData}
+						<RedeemedSlot {...redeemedData} />
 					{/each}
 				{:else}
 					You have not redeemed any Keys yet!
