@@ -7,5 +7,19 @@
 </script>
 
 <SlotBase>
-	{promotion_name} {key} {feedback_given}
+	<div class='flex justify-between'>
+		<div class='w-1/2'>
+			<span class='text-2xl'>{promotion_name}</span><br>
+		</div>
+		<div class='text-right'>
+			<span class='text-2xl'>{key}</span><br/>
+			<span class='text-xl text-green'>
+				Feedback Given:
+				<span class:text-green-600={feedback_given}
+					  class:text-red-600={!feedback_given}>
+					{feedback_given ? "Yes" : "No"}
+				</span>
+			</span>
+		</div>
+	</div>
 </SlotBase>
