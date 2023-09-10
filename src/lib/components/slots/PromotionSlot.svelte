@@ -32,7 +32,7 @@
 			buttonText = "Claiming..."
 			buttonDisabled = true
 
-			const response = await data.supabase.rpc('claim_key', { promotion_id })
+			const response = await data.supabase.rpc('claim_key', { target_promotion_id: promotion_id })
 			if (response.error)
 				throw response.error
 
@@ -60,5 +60,8 @@
 <SlotBase>
 	{promotion_name} {promotion_description} {promotion_expiry_date} ({promotion_unclaimed_keys} / {promotion_total_keys} Keys remaining)
 	<button class="mx-auto w-36 h-8 border-2 outline-none rounded-3xl transition ease-in-out bg-transparent text-white cursor-pointer hover:bg-white focus-visible:bg-white hover:text-black duration-300"
-			disabled={buttonDisabled}>{buttonText}</button>
+			disabled={buttonDisabled}
+			on:click={claimPromotion}>
+		{buttonText}
+	</button>
 </SlotBase>
