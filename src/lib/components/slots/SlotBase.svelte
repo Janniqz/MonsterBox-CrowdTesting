@@ -1,3 +1,7 @@
-<div class="bg-gray-800 border outline-none rounded py-2 px-3 transition focus-visible:border-mb-red hover:border-mb-red duration-300">
+<script lang="ts">
+	export let borderClasses = "focus-visible:border-green-500 hover:border-green-500"
+</script>
+
+<div class="bg-gray-800 border outline-none rounded py-2 px-3 transition {borderClasses} duration-300">
 	<slot/>
 </div>

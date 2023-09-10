@@ -13,7 +13,7 @@
 	export let promotion_total_keys: number
 	export let promotion_unclaimed_keys: number
 
-	let buttonText = (promotion_claimed || promotion_unclaimed_keys === 0) ? "Claimed" : "Claim"
+	let buttonText = promotion_claimed ? "Claimed" : promotion_unclaimed_keys === 0 ? "No Keys remaining" : "Claim"
 	let buttonDisabled = (promotion_claimed || promotion_unclaimed_keys === 0);
 
 	const claimPromotion = async () => {
@@ -57,11 +57,34 @@
 	}
 </script>
 
-<SlotBase>
-	{promotion_name} {promotion_description} {promotion_expiry_date} ({promotion_unclaimed_keys} / {promotion_total_keys} Keys remaining)
-	<button class="mx-auto w-36 h-8 border-2 outline-none rounded-3xl transition ease-in-out bg-transparent text-white cursor-pointer hover:bg-white focus-visible:bg-white hover:text-black duration-300"
-			disabled={buttonDisabled}
-			on:click={claimPromotion}>
-		{buttonText}
-	</button>
+<SlotBase borderClasses={buttonDisabled ? "focus-visible:border-mb-red hover:border-mb-red" : "focus-visible:border-green-500 hover:border-green-500"}>
+	<div class='flex justify-between'>
+		<div class='w-1/2'>
+			<span class='text-2xl'>{promotion_name}</span><br>
+			<span class='text-lg break-words'>
+				{promotion_description}
+			</span>
+		</div>
+		<div class='text-right'>
+			<span class='text-2xl'>{promotion_unclaimed_keys} / {promotion_total_keys} Keys remaining</span><br/>
+			<span class='text-xl'>Ends: {promotion_expiry_date}</span><br/>
+			<button class="mx-auto mt-2 w-full h-8 border-2 outline-none rounded-3xl transition ease-in-out bg-transparent duration-300"
+					disabled={buttonDisabled}
+					class:text-white={!buttonDisabled}
+					class:cursor-pointer={!buttonDisabled}
+					class:hover:border-white={!buttonDisabled}
+					class:hover:bg-white={!buttonDisabled}
+					class:hover:text-black={!buttonDisabled}
+					class:focus-visible:border-white={!buttonDisabled}
+					class:focus-visible:bg-white={!buttonDisabled}
+					class:focus-visible:text-black={!buttonDisabled}
+					class:border-gray-500={buttonDisabled}
+					class:bg-gray-500={buttonDisabled}
+					class:text-gray-800={buttonDisabled}
+					class:cursor-not-allowed={buttonDisabled}
+					on:click={claimPromotion}>
+				{buttonText}
+			</button>
+		</div>
+	</div>
 </SlotBase>
