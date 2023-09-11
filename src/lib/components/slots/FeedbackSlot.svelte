@@ -4,6 +4,8 @@
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import type { PageData } from './$types';
+	import Modal from '$components/Modal.svelte';
+	import { invalidate } from '$app/navigation';
 
 	export let data: PageData;
 
@@ -17,25 +19,27 @@
 	let buttonDisabled = false;
 	let feedbackText: string
 
+	let feedbackModelOpen = false;
+
 	$: feedbackError = feedbackText == undefined || feedbackText === "";
+	$: if (feedbackModelOpen == false) { invalidate('app:promotions') }
 
 	const sendFeedback = async () => {
 		try {
 			buttonText = "Sending..."
 			buttonDisabled = true
 
-			const response = await data.supabase.rpc('add_feedback', {
-				target_promotion_id: promotion_id,
-				target_key_id: key_id,
-				feedback_text: feedbackText
+			const request = await fetch('/api/add_feedback', {
+				method: 'POST',
+				body: JSON.stringify({ promotion_id, key_id, feedbackText })
 			})
-
+			const response = await request.json()
 			if (response.error)
 				throw response.error
 
 			if (response.data) {
 				buttonText = "Sent"
-				addAlert("Feedback sent! Add a modal here :)", true)
+				feedbackModelOpen = true;
 			} else {
 				buttonText = "Sending failed"
 				addAlert("Feedback was already given for this Key!", false)
@@ -84,3 +88,17 @@
 		</form>
 	{/if}
 </SlotBase>
+
+{#if feedbackModelOpen}
+	<Modal bind:modalClose={feedbackModelOpen}>
+		<div>
+			<span class='inline-block text-3xl transform -scale-x-100'>🎉</span>
+			<span class='text-2xl font-bold text-black'>Thanks for your feedback!</span>
+			<span class='inline-block text-3xl'>🎉</span>
+
+			<br/>
+
+			<span class='text-black'>We really appreciate it!</span>
+		</div>
+	</Modal>
+{/if}
