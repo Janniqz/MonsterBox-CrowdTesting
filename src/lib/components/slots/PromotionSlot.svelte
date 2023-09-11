@@ -1,9 +1,6 @@
 <script lang="ts">
 	import SlotBase from '$components/slots/SlotBase.svelte';
 	import { addAlert } from '$components/alert/alertStore';
-	import type { PageData } from './$types';
-
-	export let data: PageData;
 
 	export let promotion_id: bigint
 	export let promotion_name: string
@@ -32,7 +29,11 @@
 			buttonText = "Claiming..."
 			buttonDisabled = true
 
-			const response = await data.supabase.rpc('claim_key', { target_promotion_id: promotion_id })
+			const request = await fetch('/api/claim_key', {
+				method: 'POST',
+				body: JSON.stringify({ promotion_id })
+			})
+			const response = await request.json()
 			if (response.error)
 				throw response.error
 
@@ -68,8 +69,9 @@
 		<div class='text-right'>
 			<span class='text-2xl'>{promotion_unclaimed_keys} / {promotion_total_keys} Keys remaining</span><br/>
 			<span class='text-xl'>Ends: {promotion_expiry_date}</span><br/>
-			<button class="mx-auto mt-2 w-full h-8 border-2 outline-none rounded-3xl transition ease-in-out bg-transparent duration-300"
+			<button class="mx-auto mt-2 w-full h-8 border-2 outline-none rounded-3xl transition ease-in-out duration-300"
 					disabled={buttonDisabled}
+					class:bg-transparent={!buttonDisabled}
 					class:text-white={!buttonDisabled}
 					class:cursor-pointer={!buttonDisabled}
 					class:hover:border-white={!buttonDisabled}

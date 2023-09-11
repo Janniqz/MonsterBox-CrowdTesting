@@ -69,7 +69,7 @@
 
 			<input id='email'
 				   type="email"
-				   class="bg-gray-800 border outline-none rounded py-2 px-3 mb-5 transition focus-visible:border-mb-red hover:border-mb-red duration-300"
+				   class="bg-gray-800 border outline-none rounded py-2 px-3 mb-5 transition duration-300"
 				   class:border-transparent={emailError}
 				   class:focus-visible:border-mb-red={emailError}
 				   class:hover:border-mb-red={emailError}

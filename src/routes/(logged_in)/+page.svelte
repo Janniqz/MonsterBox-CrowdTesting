@@ -28,7 +28,7 @@
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(feedback) && feedback.length)}
 					{#each feedback as feedbackData}
-						<FeedbackSlot {...feedbackData}/>
+						<FeedbackSlot data={$page.data} {...feedbackData}/>
 					{/each}
 				{:else}
 					There are no promotions awaiting feedback!
