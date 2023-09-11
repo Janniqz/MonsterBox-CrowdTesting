@@ -6,7 +6,6 @@
     import { setSession } from '$components/userManagement/userStore';
 
     export let data: LayoutData;
-    let { supabase, session } = data;
     $: ({ supabase, session } = data);
 
     onMount(() => {
