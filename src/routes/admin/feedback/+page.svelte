@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import HorizontalLine from '$components/HorizontalLine.svelte';
 
 	export let data: PageData
 	let { supabase, promotions } = data;
@@ -22,6 +23,7 @@
 			.from('feedback')
 			.select('feedback_text,created_at')
 			.eq('promotion_id', promotionId)
+			.order('feedback_id', { ascending: false })
 			.range((page - 1) * 10, page * 10)
 		let { count: feedbackCount } = await supabase
 			.from('feedback')
@@ -44,18 +46,23 @@
 	{/if}
 </select>
 
-<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+<HorizontalLine/>
 
 {#if feedbacks !== null && feedbacks.length !== 0}
 	{#each feedbacks as feedback}
-		<span class='text-white'>{feedback.feedback_text} {feedback.created_at}</span>
+		<div class='border-4 border-gray-700 bg-gray-900 rounded-3xl text-white p-5 mb-5 break-words'>
+			{new Date(feedback.created_at).toUTCString()}
+			<HorizontalLine marginY='my-2'/>
+			<span>{feedback.feedback_text}</span>
+		</div>
 	{/each}
 
-	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+	<HorizontalLine/>
 
 	<div class='flex justify-center items-center'>
 		{#each Array(pages) as _, index (index)}
-			<button on:click={() => page = index + 1}>{index + 1}</button>
+			<button on:click={() => page = index + 1}
+					class:underline={page === index + 1}>{index + 1}</button>
 		{/each}
 	</div>
 {:else}
