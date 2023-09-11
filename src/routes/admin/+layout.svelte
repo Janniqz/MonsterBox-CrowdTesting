@@ -5,4 +5,9 @@
 
 <Header/>
 <Alerts/>
-<slot/>
+
+<div class="flex w-screen h-screen">
+	<div class="ml-auto mr-auto mb-auto w-2/3">
+		<slot/>
+	</div>
+</div>

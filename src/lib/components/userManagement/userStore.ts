@@ -26,7 +26,6 @@ export async function setSession(supabase: SupabaseClient, event: AuthChangeEven
 
 	if (session.access_token !== currentSession?.access_token) {
 		sessionStore.set(session);
-		addAlert("Successfully signed in!", true)
 	}
 }
 

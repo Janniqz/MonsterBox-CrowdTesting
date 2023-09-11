@@ -3,15 +3,12 @@
 	import { addAlert } from '$components/alert/alertStore';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import type { PageData } from './$types';
 	import Modal from '$components/Modal.svelte';
 	import { invalidate } from '$app/navigation';
 
-	export let data: PageData;
-
 	export let promotion_name: string
-	export let promotion_id: bigint
-	export let key_id: bigint
+	export let promotion_id: number
+	export let key_id: number
 
 	let accordionOpen: boolean
 

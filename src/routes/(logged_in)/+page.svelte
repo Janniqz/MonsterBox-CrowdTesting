@@ -17,7 +17,7 @@
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(running) && running.length)}
 					{#each running as promotionData}
-						<PromotionSlot {data} {...promotionData}/>
+						<PromotionSlot {...promotionData}/>
 					{/each}
 				{:else}
 					No running Promotions!
@@ -29,7 +29,7 @@
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(feedback) && feedback.length)}
 					{#each feedback as feedbackData}
-						<FeedbackSlot {data} {...feedbackData}/>
+						<FeedbackSlot {...feedbackData}/>
 					{/each}
 				{:else}
 					There are no promotions awaiting feedback!

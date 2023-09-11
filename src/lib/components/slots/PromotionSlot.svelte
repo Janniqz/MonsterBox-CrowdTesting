@@ -2,12 +2,12 @@
 	import SlotBase from '$components/slots/SlotBase.svelte';
 	import { addAlert } from '$components/alert/alertStore';
 	import Modal from '$components/Modal.svelte';
-	import { invalidate, invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 
-	export let promotion_id: bigint
+	export let promotion_id: number
 	export let promotion_name: string
 	export let promotion_description: string
-	export let promotion_expiry_date: Date
+	export let promotion_expiry_date: string
 	export let promotion_claimed: boolean
 	export let promotion_total_keys: number
 	export let promotion_unclaimed_keys: number
