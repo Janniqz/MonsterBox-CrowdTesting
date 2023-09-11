@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Accordion from '$components/Accordion.svelte';
-	import { page } from '$app/stores';
 	import PromotionSlot from '$components/slots/PromotionSlot.svelte';
 	import FeedbackSlot from '$components/slots/FeedbackSlot.svelte';
 	import RedeemedSlot from '$components/slots/RedeemedSlot.svelte';
+	import type { PageData } from './$types';
 
-	export let { feedback, redeemed, running } = $page.data;
+	export let data: PageData
+	$: ({ feedback, redeemed, running } = data);
 
 </script>
 
@@ -16,7 +17,7 @@
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(running) && running.length)}
 					{#each running as promotionData}
-						<PromotionSlot data={$page.data} {...promotionData}/>
+						<PromotionSlot {data} {...promotionData}/>
 					{/each}
 				{:else}
 					No running Promotions!
@@ -28,7 +29,7 @@
 			<svelte:fragment slot='content'>
 				{#if (Array.isArray(feedback) && feedback.length)}
 					{#each feedback as feedbackData}
-						<FeedbackSlot data={$page.data} {...feedbackData}/>
+						<FeedbackSlot {data} {...feedbackData}/>
 					{/each}
 				{:else}
 					There are no promotions awaiting feedback!

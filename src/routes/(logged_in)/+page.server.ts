@@ -1,6 +1,8 @@
 import type { PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async({ locals }) => {
+export const load: PageServerLoad = async({ locals, depends }) => {
+	depends('app:promotions');
+
 	const supabase = locals.supabase
 
 	let { data: runningPromotionData } = await supabase.rpc('get_running_promotions')

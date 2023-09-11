@@ -1,6 +1,8 @@
 <script lang="ts">
 	import SlotBase from '$components/slots/SlotBase.svelte';
 	import { addAlert } from '$components/alert/alertStore';
+	import Modal from '$components/Modal.svelte';
+	import { invalidate, invalidateAll } from '$app/navigation';
 
 	export let promotion_id: bigint
 	export let promotion_name: string
@@ -12,6 +14,9 @@
 
 	let buttonText = promotion_claimed ? "Claimed" : promotion_unclaimed_keys === 0 ? "No Keys remaining" : "Claim"
 	let buttonDisabled = (promotion_claimed || promotion_unclaimed_keys === 0);
+
+	let claimModalOpen = false;
+	let claimedKey: string
 
 	const claimPromotion = async () => {
 		if (promotion_claimed) {
@@ -41,7 +46,9 @@
 			if (success)
 			{
 				buttonText = "Claimed"
-				addAlert("Key claimed! Add a modal here :)" + claimed_key, true)
+				claimedKey = claimed_key;
+				claimModalOpen = true;
+				await invalidate('app:promotions')
 			}
 			else
 			{
@@ -90,3 +97,18 @@
 		</div>
 	</div>
 </SlotBase>
+
+{#if claimModalOpen}
+	<Modal bind:modalClose={claimModalOpen}>
+		<div>
+			<span class='text-2xl font-bold text-black'>Thanks for participating!</span><br/>
+			<span class='inline-block text-xl text-black my-3'>{claimedKey}</span><br/>
+			<span class='text-black'>Please make sure to send us some feedback when you're done playing!</span><br/>
+			<a class="inline-block pt-1 mx-auto mt-2 w-1/2 h-8 border-2 bg-transparent border-black hover:bg-black hover:text-white focus-visible:bg-black focus-visible:text-white text-black outline-none rounded-3xl transition ease-in-out duration-300"
+			   href='https://store.steampowered.com/account/registerkey?key={claimedKey}'
+			   target='_blank'>
+				Redeem
+			</a>
+		</div>
+	</Modal>
+{/if}
