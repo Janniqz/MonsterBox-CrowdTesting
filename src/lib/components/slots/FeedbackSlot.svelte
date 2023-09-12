@@ -1,9 +1,9 @@
 <script lang="ts">
+	import Modal from '$components/Modal.svelte';
 	import SlotBase from '$components/slots/SlotBase.svelte';
 	import { addAlert } from '$components/alert/alertStore';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import Modal from '$components/Modal.svelte';
 	import { invalidate } from '$app/navigation';
 
 	export let promotion_name: string
@@ -19,7 +19,10 @@
 	let feedbackModelOpen = false;
 
 	$: feedbackError = feedbackText == undefined || feedbackText === "";
-	$: if (feedbackModelOpen == false) { invalidate('app:promotions') }
+	$: if (feedbackModelOpen == false) {
+		feedbackText = ''
+		invalidate('app:promotions')
+	}
 
 	const sendFeedback = async () => {
 		try {

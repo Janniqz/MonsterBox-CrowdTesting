@@ -75,7 +75,7 @@
 		</div>
 		<div class='text-right'>
 			<span class='text-2xl'>{promotion_unclaimed_keys} / {promotion_total_keys} Keys remaining</span><br/>
-			<span class='text-xl'>Ends: {promotion_expiry_date}</span><br/>
+			<span class='text-xl'>Ends: {promotion_expiry_date ?? "Never!"}</span><br/>
 			<button class="mx-auto mt-2 w-full h-8 border-2 outline-none rounded-3xl transition ease-in-out duration-300"
 					disabled={buttonDisabled}
 					class:bg-transparent={!buttonDisabled}
