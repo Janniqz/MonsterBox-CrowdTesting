@@ -52,6 +52,8 @@ export async function getSessionUser(supabase: SupabaseClient, session: Session 
 	const sessionUser = session.user;
 
 	let user: User | null = null;
+
+	// Get the User profile to check if they're an admin
 	const profile = await supabase.from('profiles').select().eq('id', sessionUser.id).limit(1).single();
 	if (profile.data !== null)
 	{

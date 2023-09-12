@@ -10,6 +10,7 @@ import type { RequestHandler } from './$types';
  * @throws - If the user is not authorized.
  */
 export const POST: RequestHandler = async ({ request, locals, fetch }) => {
+	// Sanity check that the User is actually logged in
 	const session = await locals.getSession();
 	if (session === null)
 		throw error(401, "Unauthorized!")

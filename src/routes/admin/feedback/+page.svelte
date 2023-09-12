@@ -26,12 +26,15 @@
 			return;
 		}
 
+		// Get Feedback for the selected Promotion ordered by its ID (newest at top)
 		let { data: feedbackData } = await supabase
 			.from('feedback')
 			.select('feedback_text,created_at')
 			.eq('promotion_id', promotionId)
 			.order('feedback_id', { ascending: false })
 			.range((page - 1) * 10, page * 10 - 1)
+
+		// Get the total count of Feedbacks for this Promotion
 		let { count: feedbackCount } = await supabase
 			.from('feedback')
 			.select('*', { count: 'exact', head: true })

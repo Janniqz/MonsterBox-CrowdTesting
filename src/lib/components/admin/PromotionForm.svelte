@@ -22,11 +22,13 @@
 	 * @param dataSource - The selected Promotion the information to update the form fields. If null fields will stay empty.
 	 */
 	async function updateFormFields(dataSource: {claimed_keys: number | null, created_at: string | null, description: string | null, expiration_date: string | null, feedback_ratio: number | null, name: string | null, promotion_id: number | null, total_keys: number | null} | null) {
+		// If we have a selected Promotion, use it's values. Otherwise clear all fields.
 		promotionName = dataSource?.name ?? ''
 		promotionDescription = dataSource?.description ?? ''
 		promotionTemporary = dataSource?.expiration_date !== null
 		promotionEndDate = dataSource?.expiration_date ?? ''
 
+		// Load the existing keys if needed
 		if (dataSource !== null) {
 			await loadExistingKeys(dataSource.promotion_id!).then(r => promotionExistingKeys = r)
 		}
@@ -58,8 +60,11 @@
 	 * @param key - The key to try to add.
 	 */
 	function tryAddKey(key: string) {
+		// If the Key to be added is already present in the new / existing keys, don't do anything
 		if (key.length == 0 || promotionNewKeys.includes(key) || !!promotionExistingKeys?.find(k => k.key == key))
 			return
+
+		// Assign promotionNewKeys to itself to trigger reactivity
 		promotionNewKeys.push(key)
 		promotionNewKeys = promotionNewKeys
 	}
@@ -71,27 +76,32 @@
 	 * @param existing - A boolean indicating whether the key is from promotionExistingKeys or promotionNewKeys.
 	 */
 	function tryRemoveKey(key: string | null, existing: boolean) {
+		// If no key is passed, don't do anything
 		if (key === null || key.length == 0)
 			return
 
+		// If it's a new key, just remove it from the array
 		if (!existing) {
+			// Make sure the key actually exists
 			if (!promotionNewKeys.includes(key))
 				return;
 			promotionNewKeys = promotionNewKeys.filter(k => k !== key)
 		}
+		// If it's an existing key, remove it from the array and save it for removal
 		else {
 			if (promotionExistingKeys === null)
 				return;
 
+			// Make sure the key actually exists
 			let targetElement = promotionExistingKeys.find(k => k.key === key)
 			if (targetElement === undefined)
 				return;
+
 			promotionRemovedKeys.push(targetElement.key_id!)
 			promotionExistingKeys = promotionExistingKeys.filter(k => k.key_id !== targetElement!.key_id)
 		}
 	}
 
-	// Creates / Updates a Promotion in the Database
 	/**
 	 * Handles the saving of a promotion to a database.
 	 * If the promotionEditTarget is not null, it updates the existing promotion.
@@ -105,13 +115,18 @@
 		}
 
 		let result: PostgrestSingleResponse<any[]>
+
+		// If we have a selected Promotion, update it
 		if (promotionEditTarget !== null) {
 			result = await supabase
 				.from('promotions')
 				.update(promotionData)
 				.eq('promotion_id', promotionEditTarget.promotion_id!)
-		.select()
+				.select()
+				.limit(1)
 		}
+
+		// Otherwise create a new one
 		else {
 			result = await supabase
 				.from('promotions')
@@ -120,8 +135,8 @@
 				.limit(1)
 		}
 
+		// If we got a result, update added / removed Keys
 		if (result.data) {
-			// Create newly added Keys
 			await updateKeys(result.data[0].promotion_id)
 			formCallback()
 		}
@@ -134,18 +149,23 @@
 	async function updateKeys(promotionId: number) {
 		if (promotionNewKeys.length !== 0) {
 			let addKeys = []
+
+			// Add the promotion_id to the new Keys for correct association
 			for (const newKey of promotionNewKeys) {
 				addKeys.push({promotion_id: promotionId, key: newKey})
 			}
 
-			const { data, error } = await supabase
+			// Bulk insert the new Keys
+			await supabase
 				.from('keys')
 				.insert(addKeys)
 				.select()
 		}
 
 		if (promotionRemovedKeys.length !== 0) {
-			const { error } = await supabase
+			// Bulk remove the Keys that should be removed
+			// Makes sure that they actually belong to the target Promotion
+			await supabase
 				.from('keys')
 				.delete()
 				.in('key_id', promotionRemovedKeys)

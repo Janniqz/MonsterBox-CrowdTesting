@@ -8,7 +8,10 @@ import type { LayoutLoad } from './$types';
  */
 export const load: LayoutLoad = async ({ parent }) => {
 	const { supabase, session, user } = await parent();
+
+	// If the User isn't logged in, redirect them to the login page
 	if (!session)
 		throw redirect(307, '/login');
+
 	return { supabase, session, user }
 };

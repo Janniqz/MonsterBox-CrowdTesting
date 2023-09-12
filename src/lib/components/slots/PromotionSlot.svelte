@@ -45,6 +45,7 @@
 			buttonText = "Claiming..."
 			buttonDisabled = true
 
+			// Send a request to the API to avoid the user having to modify sensitive tables
 			const request = await fetch('/api/claim_key', {
 				method: 'POST',
 				body: JSON.stringify({ promotion_id })
@@ -53,6 +54,7 @@
 			if (response.error)
 				throw response.error
 
+			// Extract the required data from the result
 			const { success, error_message, claimed_key } = response.data
 			if (success)
 			{

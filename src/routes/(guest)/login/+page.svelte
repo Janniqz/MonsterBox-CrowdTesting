@@ -18,6 +18,7 @@
 	 * Handles the login process by sending a magic link to the user's email for authentication.
 	 */
 	const handleLogin = async () => {
+		// If there's an issue with the entered Email, don't do anything
 		if (emailError)
 			return;
 
@@ -25,6 +26,8 @@
 		{
 			buttonText = "Sending..."
 			buttonDisabled = true
+
+			// Sends an Email to the User. No password required.
 			const response = await data.supabase.auth.signInWithOtp({
 				email: email,
 				options: {

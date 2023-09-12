@@ -25,11 +25,15 @@
 	 * @param page - The page number to load promotions for.
 	 */
 	async function loadPromotions(page: number) {
+
+		// Get the Promotions on Page X ordered by their ID (newest on top)
 		let { data: promotionData } = await supabase
 			.from('promotion_admin_info')
 			.select('*')
-			.order('created_at', { ascending: false })
+			.order('promotion_id', { ascending: false })
 			.range((page - 1) * 10, page * 10 - 1)
+
+		// Get the total number of Promotions
 		let { count: promotionCount } = await supabase
 			.from('promotions')
 			.select('*', { count: 'exact', head: true })

@@ -33,6 +33,7 @@
 			buttonText = "Sending..."
 			buttonDisabled = true
 
+			// Send a request to the API to avoid the user having to modify sensitive tables
 			const request = await fetch('/api/add_feedback', {
 				method: 'POST',
 				body: JSON.stringify({ promotion_id, key_id, feedbackText })
