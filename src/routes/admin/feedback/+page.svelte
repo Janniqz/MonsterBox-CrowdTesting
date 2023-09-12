@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import HorizontalLine from '$components/HorizontalLine.svelte';
+	import Pagination from '$components/Pagination.svelte';
 
 	export let data: PageData
 	let { supabase, promotions } = data;
@@ -10,9 +11,9 @@
 	let pages: number;
 	let feedbacks: { feedback_text: string, created_at: string }[] | null = null;
 
-	$: (load_feedback(promotionId, page))
+	$: (loadFeedback(promotionId, page))
 
-	async function load_feedback(promotionId: number, page: number) {
+	async function loadFeedback(promotionId: number, page: number) {
 		if (promotionId === -1 || promotionId == undefined) {
 			feedbacks = null;
 			pages = 0;
@@ -58,13 +59,7 @@
 	{/each}
 
 	<HorizontalLine/>
-
-	<div class='flex justify-center items-center'>
-		{#each Array(pages) as _, index (index)}
-			<button on:click={() => page = index + 1}
-					class:underline={page === index + 1}>{index + 1}</button>
-		{/each}
-	</div>
+	<Pagination {page} {pages}/>
 {:else}
 	<span class='text-white'>No feedback available :(</span>
 {/if}
