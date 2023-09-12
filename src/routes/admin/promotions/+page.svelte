@@ -1,6 +1,9 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import HorizontalLine from '$components/HorizontalLine.svelte';
+	import PromotionForm from '$components/admin/PromotionForm.svelte';
+	import Pagination from '$components/Pagination.svelte';
+	import { addAlert } from '$components/alert/alertStore';
 
 	export let data: PageData
 	let { supabase } = data;
@@ -9,9 +12,15 @@
 	let page: number = 1;
 	let pages: number;
 
-	$: (load_promotions(page))
+	// Form Variables
+	let promotionFormOpen = false;
+	let promotionEditTarget: {claimed_keys: number | null, created_at: string | null, description: string | null, expiration_date: string | null, feedback_ratio: number | null, name: string | null, promotion_id: number | null, total_keys: number | null} | null = null;
 
-	async function load_promotions(page: number) {
+	$: (loadPromotions(page))
+	$: if (!promotionFormOpen) promotionEditTarget = null;
+
+	// Updates the displayed list of Promotions depending on the currently selected Page
+	async function loadPromotions(page: number) {
 		let { data: promotionData } = await supabase
 			.from('promotion_admin_info')
 			.select('*')
@@ -25,10 +34,25 @@
 		pages = Math.ceil((promotionCount ?? 0) / 10);
 	}
 
+	async function onFormCallback() {
+		// If we created a new Promotion, go back to the first page. Otherwise, just reload the current page.
+		if (promotionEditTarget === null) {
+			page = 1
+			addAlert('Promotion created!', true)
+		}
+		else {
+			addAlert('Promotion updated!', true)
+		}
+
+		promotionFormOpen = false;
+		await loadPromotions(page);
+	}
+
 </script>
 
 <div class='flex justify-end'>
-	<button type="button" class="w-1/5 h-12 bg-green-500 hover:bg-green-600 focus-visible:bg-green-600 text-white rounded-md transition ease-in-out duration-300">
+	<button type="button" class="w-1/5 h-12 bg-green-500 hover:bg-green-600 focus-visible:bg-green-600 text-white rounded-md transition ease-in-out duration-300"
+			on:click={() => promotionFormOpen = true}>
 		New Promotion
 	</button>
 </div>
@@ -43,7 +67,11 @@
 					<span class='text-2xl'>{promotion.name}</span>
 				</div>
 				<div class='flex w-1/5 justify-end'>
-					<button type="button" class="w-full h-full bg-blue-500 hover:bg-blue-600 focus-visible:bg-blue-600 text-white rounded-md transition ease-in-out duration-300">
+					<button type="button" class="w-full h-full bg-blue-500 hover:bg-blue-600 focus-visible:bg-blue-600 text-white rounded-md transition ease-in-out duration-300"
+							on:click={() => {
+								promotionEditTarget = promotion
+								promotionFormOpen = true
+							}}>
 						Edit Promotion
 					</button>
 				</div>
@@ -54,7 +82,7 @@
 					<span>{promotion.description}</span>
 				</div>
 				<div class='w-1/5 pl-2'>
-					<span>Expiration: {promotion.expiration_date}</span><br/>
+					<span>Expiration: {promotion.expiration_date ?? 'None'}</span><br/>
 					<span>Keys: {promotion.claimed_keys} / {promotion.total_keys} (C / T)</span><br/>
 					<span>Feedback Ratio: {(promotion.feedback_ratio ?? 1) * 100}%</span>
 				</div>
@@ -63,13 +91,11 @@
 	{/each}
 
 	<HorizontalLine/>
-
-	<div class='flex justify-center items-center'>
-		{#each Array(pages) as _, index (index)}
-			<button on:click={() => page = index + 1}
-					class:underline={page === index + 1}>{index + 1}</button>
-		{/each}
-	</div>
+	<Pagination {page} {pages}/>
 {:else}
 	<span class='text-white'>No promotions available :(</span>
+{/if}
+
+{#if promotionFormOpen}
+	<PromotionForm {supabase} {promotionFormOpen} {promotionEditTarget} formCallback={onFormCallback}/>
 {/if}
