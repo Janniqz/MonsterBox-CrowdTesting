@@ -25,7 +25,7 @@
 			.from('promotion_admin_info')
 			.select('*')
 			.order('created_at', { ascending: false })
-			.range((page - 1) * 10, page * 10)
+			.range((page - 1) * 10, page * 10 - 1)
 		let { count: promotionCount } = await supabase
 			.from('promotions')
 			.select('*', { count: 'exact', head: true })

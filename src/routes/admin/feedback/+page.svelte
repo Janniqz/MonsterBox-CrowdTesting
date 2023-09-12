@@ -25,7 +25,7 @@
 			.select('feedback_text,created_at')
 			.eq('promotion_id', promotionId)
 			.order('feedback_id', { ascending: false })
-			.range((page - 1) * 10, page * 10)
+			.range((page - 1) * 10, page * 10 - 1)
 		let { count: feedbackCount } = await supabase
 			.from('feedback')
 			.select('*', { count: 'exact', head: true })
