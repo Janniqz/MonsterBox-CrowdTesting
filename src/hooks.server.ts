@@ -3,6 +3,9 @@ import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
 import type { Handle } from '@sveltejs/kit';
 import type { Database } from '$lib/supabaseTypes';
 
+/**
+ * Supabase Initialization
+ */
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createSupabaseServerClient<Database>({
 		supabaseUrl: PUBLIC_SUPABASE_URL,

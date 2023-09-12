@@ -1,6 +1,11 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
 
+/**
+ * Represents a function that retrieves the layout load information.
+ *
+ * @throws {Error} - Throws an error if the session is not available or the user is not an admin.
+ */
 export const load: LayoutLoad = async ({ parent }) => {
 	const { supabase, session, user } = await parent();
 	if (!session)

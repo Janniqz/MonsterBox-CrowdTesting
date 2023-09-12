@@ -1,5 +1,8 @@
 import type { PageServerLoad } from './$types'
 
+/**
+ * Loads data related to current Promotions and user-specific feedback and redemption data.
+ */
 export const load: PageServerLoad = async({ locals, depends }) => {
 	depends('app:promotions');
 

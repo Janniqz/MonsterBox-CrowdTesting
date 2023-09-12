@@ -16,7 +16,11 @@
 
 	$: (updateFormFields(promotionEditTarget))
 
-	// Updates the Form Fields with the values of the (possibly) selected Promotion for editing
+	/**
+	 * Updates the form fields with the data from the selected Promotion.
+	 *
+	 * @param dataSource - The selected Promotion the information to update the form fields. If null fields will stay empty.
+	 */
 	async function updateFormFields(dataSource: {claimed_keys: number | null, created_at: string | null, description: string | null, expiration_date: string | null, feedback_ratio: number | null, name: string | null, promotion_id: number | null, total_keys: number | null} | null) {
 		promotionName = dataSource?.name ?? ''
 		promotionDescription = dataSource?.description ?? ''
@@ -34,16 +38,25 @@
 		promotionRemovedKeys = []
 	}
 
-	// Retrieves the existing Keys for the Promotion to be edited
-	async function loadExistingKeys(promotion_id: number) {
+	/**
+	 * Loads existing keys for a given promotion ID.
+	 *
+	 * @param promotionId - The ID of the promotion.
+	 * @returns - An array of key objects containing key_id and key properties.
+	 */
+	async function loadExistingKeys(promotionId: number) {
 		let { data } = await supabase
 			.from('keys')
 			.select('key_id,key')
-			.eq('promotion_id', promotion_id)
+			.eq('promotion_id', promotionId)
 		return data;
 	}
 
-	// Attempts to add a new Key to the Promotion. If it already exists in either the existing or new keys, doesn't do anything
+	/**
+	 * Tries to add a key to the 'promotionNewKeys' array if it doesn't already exist.
+	 *
+	 * @param key - The key to try to add.
+	 */
 	function tryAddKey(key: string) {
 		if (key.length == 0 || promotionNewKeys.includes(key) || !!promotionExistingKeys?.find(k => k.key == key))
 			return
@@ -51,7 +64,12 @@
 		promotionNewKeys = promotionNewKeys
 	}
 
-	// Attempts to remove a Key from the Promotion. If it doesn't exist in the new / existing Keys, doesn't do anything
+	/**
+	 * Removes a key from either the promotionNewKeys or promotionExistingKeys array.
+	 *
+	 * @param key - The key to be removed.
+	 * @param existing - A boolean indicating whether the key is from promotionExistingKeys or promotionNewKeys.
+	 */
 	function tryRemoveKey(key: string | null, existing: boolean) {
 		if (key === null || key.length == 0)
 			return
@@ -74,6 +92,11 @@
 	}
 
 	// Creates / Updates a Promotion in the Database
+	/**
+	 * Handles the saving of a promotion to a database.
+	 * If the promotionEditTarget is not null, it updates the existing promotion.
+	 * Otherwise, it creates a new promotion.
+	 */
 	async function handleSavePromotion() {
 		let promotionData = {
 			name: promotionName,
@@ -104,13 +127,15 @@
 		}
 	}
 
-	// Updates the Keys in the database. If this is a new Promotion, all Keys will be added.
-	// If it's an existing promotion, new keys are added and keys to be removed are deleted.
-	async function updateKeys(promotion_id: number) {
+	/**
+	 * Adds / Removes keys for a specific promotion.
+	 * @param promotionId - The ID of the promotion.
+	 */
+	async function updateKeys(promotionId: number) {
 		if (promotionNewKeys.length !== 0) {
 			let addKeys = []
 			for (const newKey of promotionNewKeys) {
-				addKeys.push({promotion_id: promotion_id, key: newKey})
+				addKeys.push({promotion_id: promotionId, key: newKey})
 			}
 
 			const { data, error } = await supabase
@@ -124,7 +149,7 @@
 				.from('keys')
 				.delete()
 				.in('key_id', promotionRemovedKeys)
-				.eq('promotion_id', promotion_id)
+				.eq('promotion_id', promotionId)
 		}
 	}
 </script>

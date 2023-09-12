@@ -14,6 +14,9 @@
 
 	$: emailError = email == undefined || !/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 
+	/**
+	 * Handles the login process by sending a magic link to the user's email for authentication.
+	 */
 	const handleLogin = async () => {
 		if (emailError)
 			return;

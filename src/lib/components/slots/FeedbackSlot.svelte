@@ -24,6 +24,10 @@
 		invalidate('app:promotions')
 	}
 
+	/**
+	 * Sends feedback to the DB.
+	 * If successful shows a thanks modal.
+	 */
 	const sendFeedback = async () => {
 		try {
 			buttonText = "Sending..."

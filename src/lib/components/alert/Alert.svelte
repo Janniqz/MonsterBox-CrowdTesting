@@ -5,6 +5,9 @@
 
 	export let alertValues: Alert
 
+	/**
+	 * Removes the alert element from the DOM.
+	 */
 	function handleDismiss() {
 		removeAlert()
 	}

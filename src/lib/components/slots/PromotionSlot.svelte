@@ -18,6 +18,17 @@
 	let claimModalOpen = false;
 	let claimedKey: string
 
+	/**
+	 * Claims a promotion key.
+	 *
+	 * If the promotion has already been claimed, an alert is displayed.
+	 * If there are no remaining keys for the promotion, an alert is displayed.
+	 * Otherwise, an API request is made to claim the key.
+	 *
+	 * If the claim is successful, the button text is updated to "Claimed" and the claim modal is opened.
+	 * If the claim fails, an alert is displayed.
+	 * If an error occurs during the claim process, an alert is displayed.
+	 */
 	const claimPromotion = async () => {
 		if (promotion_claimed) {
 			addAlert("You've already claimed a Key for this Promotion!", false)

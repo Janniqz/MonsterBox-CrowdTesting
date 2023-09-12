@@ -19,7 +19,11 @@
 	$: (loadPromotions(page))
 	$: if (!promotionFormOpen) promotionEditTarget = null;
 
-	// Updates the displayed list of Promotions depending on the currently selected Page
+	/**
+	 * Retrieves promotions data from the 'promotion_admin_info' table and updates the 'promotions' and 'pages' variables.
+	 *
+	 * @param page - The page number to load promotions for.
+	 */
 	async function loadPromotions(page: number) {
 		let { data: promotionData } = await supabase
 			.from('promotion_admin_info')
@@ -34,6 +38,10 @@
 		pages = Math.ceil((promotionCount ?? 0) / 10);
 	}
 
+	/**
+	 * Performs a callback function after submitting the Promotion form.
+	 * Shows an Alert, hides the Form Modal and reloads Promotions.
+	 */
 	async function onFormCallback() {
 		// If we created a new Promotion, go back to the first page. Otherwise, just reload the current page.
 		if (promotionEditTarget === null) {

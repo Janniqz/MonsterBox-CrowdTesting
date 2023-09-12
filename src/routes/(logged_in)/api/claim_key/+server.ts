@@ -2,6 +2,13 @@ import { json, error } from '@sveltejs/kit';
 import { PRIVATE_SUPABASE_SERVICE_KEY } from '$env/static/private';
 import type { RequestHandler } from './$types';
 
+/**
+ * Process a POST request and claim a Key for the current User using Supabase REST API via the Supabase Service User.
+ *
+ * @async
+ * @returns - The JSON response object containing the result and error information.
+ * @throws - If the user is not authorized.
+ */
 export const POST: RequestHandler = async ({ request, locals, fetch }) => {
 	const session = await locals.getSession();
 	if (session === null)

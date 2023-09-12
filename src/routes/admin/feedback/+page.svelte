@@ -13,6 +13,12 @@
 
 	$: (loadFeedback(promotionId, page))
 
+	/**
+	 * Loads feedback for a specific promotion and page.
+	 *
+	 * @param promotionId - The ID of the promotion.
+	 * @param page - The current page number.
+	 */
 	async function loadFeedback(promotionId: number, page: number) {
 		if (promotionId === -1 || promotionId == undefined) {
 			feedbacks = null;

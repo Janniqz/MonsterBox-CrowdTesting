@@ -11,6 +11,15 @@ export type User = {
 
 export let sessionStore: Writable<Session | null> = writable(null);
 
+/**
+ * Sets the session for the Supabase client based on the provided parameters.
+ *
+ * @param supabase - The Supabase client instance.
+ * @param event - The authentication change event.
+ * @param session - The session object to set. Use `null` to clear the session.
+ *
+ * @return - A promise that resolves once the session is set or cleared.
+ */
 export async function setSession(supabase: SupabaseClient, event: AuthChangeEvent, session: Session | null) {
 	const currentSession = get(sessionStore);
 	if (session == null)
@@ -29,6 +38,13 @@ export async function setSession(supabase: SupabaseClient, event: AuthChangeEven
 	}
 }
 
+/**
+ * Retrieves the session user from the Supabase client and session.
+ *
+ * @param supabase - The Supabase client.
+ * @param session - The session object representing the user's session.
+ * @returns The session user, or null if the session is null or the user does not have a profile.
+ */
 export async function getSessionUser(supabase: SupabaseClient, session: Session | null) {
 	if (!session)
 		return null;

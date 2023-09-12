@@ -4,6 +4,10 @@ import type { LayoutLoad } from './$types';
 import type { Database } from '$lib/supabaseTypes';
 import { getSessionUser } from '$components/userManagement/userStore';
 
+/**
+ * Loads the Root Layout.
+ * Makes sure that all Locals are available, including the Supabase Client, session, and user.
+ */
 export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 	depends('supabase:auth');
 
