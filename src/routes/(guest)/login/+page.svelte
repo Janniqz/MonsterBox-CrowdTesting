@@ -8,7 +8,7 @@
 
 	export let data: PageData;
 
-	let buttonText = "Login"
+	let buttonText = "Login / Register"
 	let buttonDisabled = false;
 	let email: string
 
