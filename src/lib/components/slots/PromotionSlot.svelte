@@ -82,7 +82,7 @@
 	<div class='flex justify-between'>
 		<div class='w-1/2'>
 			<span class='text-2xl'>{promotion_name}</span><br>
-			<span class='text-lg break-words'>
+			<span class='text-lg whitespace-pre-line break-words'>
 				{promotion_description}
 			</span>
 		</div>

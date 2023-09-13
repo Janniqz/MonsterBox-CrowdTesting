@@ -9,10 +9,10 @@
 	export let formCallback: () => void;
 
 	let promotionName: string, promotionDescription: string, promotionTemporary: boolean, promotionEndDate: string;
-	let promotionExistingKeys: {key_id: number | null, key: string | null}[] | null
-	let promotionNewKeys: string[]
-	let promotionRemovedKeys: number[]
-	let promotionKeyInput: string
+	let promotionExistingKeys: {key_id: number | null, key: string | null}[] | null = null;
+	let promotionNewKeys: string[] = [];
+	let promotionRemovedKeys: number[] = [];
+	let promotionKeyInput: string;
 
 	$: (updateFormFields(promotionEditTarget))
 
@@ -22,7 +22,7 @@
 	 * @param dataSource - The selected Promotion the information to update the form fields. If null fields will stay empty.
 	 */
 	async function updateFormFields(dataSource: {claimed_keys: number | null, created_at: string | null, description: string | null, expiration_date: string | null, feedback_ratio: number | null, name: string | null, promotion_id: number | null, total_keys: number | null} | null) {
-		// If we have a selected Promotion, use it's values. Otherwise clear all fields.
+		// If we have a selected Promotion, use its values. Otherwise, clear all fields.
 		promotionName = dataSource?.name ?? ''
 		promotionDescription = dataSource?.description ?? ''
 		promotionTemporary = dataSource?.expiration_date !== null
@@ -123,7 +123,6 @@
 				.update(promotionData)
 				.eq('promotion_id', promotionEditTarget.promotion_id!)
 				.select()
-				.limit(1)
 		}
 
 		// Otherwise create a new one
@@ -132,7 +131,6 @@
 				.from('promotions')
 				.insert(promotionData)
 				.select()
-				.limit(1)
 		}
 
 		// If we got a result, update added / removed Keys
@@ -159,7 +157,6 @@
 			await supabase
 				.from('keys')
 				.insert(addKeys)
-				.select()
 		}
 
 		if (promotionRemovedKeys.length !== 0) {
@@ -182,7 +179,7 @@
 			<HorizontalLine marginY='my-4'/>
 			<span class='inline-block text-black text-2xl pb-2'>Settings</span><br/>
 			<label for='promotionDescription' class='text-black'>Promotion Description</label><br/>
-			<textarea bind:value={promotionDescription} required id='promotionDescription' placeholder='Description' rows='4' class='w-full inline-block mb-2 text-black border border-gray-500 hover:border-green-500 focus-visible:border-green-500 rounded-md'/>
+			<textarea bind:value={promotionDescription} required id='promotionDescription' placeholder='Description' rows='4' class='w-full whitespace-pre-line inline-block mb-2 text-black border border-gray-500 hover:border-green-500 focus-visible:border-green-500 rounded-md'/>
 			<br/>
 			<label for='promotionTemporary' class='text-black'>Does this Promotion have an end date?</label>
 			<input bind:checked={promotionTemporary} id='promotionTemporary' type='checkbox'>

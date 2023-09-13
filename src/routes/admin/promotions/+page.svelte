@@ -91,7 +91,7 @@
 			<HorizontalLine marginY='my-2'/>
 			<div class='flex divide-x-2 divide-gray-700 w-full'>
 				<div class='w-4/5 pr-2'>
-					<span>{promotion.description}</span>
+					<span class='whitespace-pre-line'>{promotion.description}</span>
 				</div>
 				<div class='w-1/5 pl-2'>
 					<span>Expiration: {promotion.expiration_date ?? 'None'}</span><br/>
