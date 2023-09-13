@@ -1,38 +1,33 @@
-# create-svelte
+# Installation
+___
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+### 1. Prerequisites
+- [NodeJS](https://nodejs.org/en/download) (Built with v18.17.1)
+- [Supabase Account & Project](https://supabase.com/)
 
-## Creating a project
+### 2. Database Setup
+To get the Database itself ready, follow the following steps:
+1. Log into your Supabase Account and head to the SQL Editor
+2. Copy the Contents of the provided ***supabase_install_script.sql*** and paste it into the Editor
+3. Execute
 
-If you're seeing this, you've probably already done this step. Congrats!
+### 3. Project Configuration
+The Project needs some configuration to work correctly:
+1. Create a copy (/ rename) the included .env.example file and name it .env
+2. Fill out the included fields with the values from your Supabase project
+    1. Values can be found under Project Settings --> API
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Additionally, the required packages should be installed by executing `npm install` in the project directory.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+# Running the Application
+___
 
-## Developing
+### 1. Development
+When running the application locally / in a development environment, it can be started with the `npm run dev` command.<br>
+This will start a local instance of the application reachable via http://localhost:5173/ .
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### 2. Production
+For testing the production version of the application locally, `npm run preview` can be used.<br>
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+When actually packaging the application, `npm run build` should be used.<br>
+After packaging, it can then be run via `node build` (provided the build folder is still named build)
