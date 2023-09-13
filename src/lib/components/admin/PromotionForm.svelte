@@ -12,9 +12,14 @@
 	let promotionExistingKeys: {key_id: number | null, key: string | null}[] | null = null;
 	let promotionNewKeys: string[] = [];
 	let promotionRemovedKeys: number[] = [];
-	let promotionKeyInput: string;
+	let promotionKeyInput: string = '';
+
+	let promotionNameError: boolean, promotionEndDateError: boolean, promotionKeyInputError: boolean
 
 	$: (updateFormFields(promotionEditTarget))
+	$: (promotionNameError = !/\S/.test(promotionName))
+	$: (promotionEndDateError = promotionTemporary && !promotionEndDate)
+	$: (promotionKeyInputError = promotionKeyInput.length == 0 || /\s/.test(promotionKeyInput))
 
 	/**
 	 * Updates the form fields with the data from the selected Promotion.
@@ -171,9 +176,12 @@
 	}
 </script>
 
-<Modal modalClose={promotionFormOpen}>
+<Modal bind:modalOpen={promotionFormOpen}>
 	<div class='flex justify-start items-start text-left w-full h-full'>
 		<div class='w-full'>
+			{#if promotionNameError}
+				<span class='text-mb-red text-'>Invalid Name Input!</span><br/>
+			{/if}
 			<label for='promotionName' class='text-black'>Promotion Name</label><br/>
 			<input bind:value={promotionName} required id='promotionName' type='text' class='text-black border border-gray-500 hover:border-green-500 focus-visible:border-green-500 rounded-md'>
 			<HorizontalLine marginY='my-4'/>
@@ -185,6 +193,9 @@
 			<input bind:checked={promotionTemporary} id='promotionTemporary' type='checkbox'>
 			{#if promotionTemporary}
 				<br/>
+				{#if promotionEndDateError}
+					<span class='text-mb-red text-'>Invalid Date Input!</span><br/>
+				{/if}
 				<label for='promotionEndDate' class='text-black'>Promotion End Date</label>
 				<input bind:value={promotionEndDate} id='promotionEndDate' type='date' class='text-black border border-gray-500 hover:border-green-500 focus-visible:border-green-500 rounded-md'>
 			{/if}
@@ -216,9 +227,14 @@
 					</ul>
 				</div>
 				<div class='w-2/5 pl-2'>
+					{#if promotionKeyInputError}
+						<span class='text-mb-red text-'>Invalid Key Input!</span><br/>
+					{/if}
 					<label for='promotionNewKey' class='text-black'>Add new Key</label>
 					<input bind:value={promotionKeyInput} id='promotionNewKey' type='text' class='text-black border border-gray-500 rounded-md'>
 					<button class='w-2/5 h-8 mt-2 bg-green-500 hover:bg-green-600 focus-visible:bg-green-600 text-white rounded-md transition ease-in-out duration-300'
+							disabled={promotionKeyInputError}
+							class:cursor-not-allowed={promotionKeyInputError}
 							on:click={() => {
 									tryAddKey(promotionKeyInput)
 									promotionKeyInput = ''
@@ -230,11 +246,13 @@
 
 	<svelte:fragment slot='modalButtons'>
 		<button slot='modalButtons' type="button" class="w-1/5 h-8 ml-3 bg-green-500 hover:bg-green-600 focus-visible:bg-green-600 text-white rounded-md transition ease-in-out duration-300"
+				disabled={promotionNameError || promotionEndDateError}
+				class:cursor-not-allowed={promotionNameError || promotionEndDateError}
 				on:click={() => handleSavePromotion()}>
 			Save
 		</button>
 		<button type="button" class="w-1/5 h-8 bg-red-600 hover:bg-red-700 focus-visible:bg-red-700 text-white rounded-md transition ease-in-out duration-300"
-				on:click={() => promotionFormOpen = !promotionFormOpen}>Cancel
+				on:click={() => promotionFormOpen = false}>Cancel
 		</button>
 	</svelte:fragment>
 </Modal>

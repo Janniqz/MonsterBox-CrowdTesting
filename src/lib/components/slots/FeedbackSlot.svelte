@@ -95,7 +95,7 @@
 </SlotBase>
 
 {#if feedbackModelOpen}
-	<Modal bind:modalClose={feedbackModelOpen}>
+	<Modal bind:modalOpen={feedbackModelOpen}>
 		<div>
 			<span class='inline-block text-3xl transform -scale-x-100'>🎉</span>
 			<span class='text-2xl font-bold text-black'>Thanks for your feedback!</span>

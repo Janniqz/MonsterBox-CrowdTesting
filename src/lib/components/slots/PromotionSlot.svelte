@@ -112,7 +112,7 @@
 </SlotBase>
 
 {#if claimModalOpen}
-	<Modal bind:modalClose={claimModalOpen}>
+	<Modal bind:modalOpen={claimModalOpen}>
 		<div>
 			<span class='text-2xl font-bold text-black'>Thanks for participating!</span><br/>
 			<span class='inline-block text-xl text-black my-3'>{claimedKey}</span><br/>

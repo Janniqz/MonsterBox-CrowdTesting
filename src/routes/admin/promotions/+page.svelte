@@ -109,5 +109,5 @@
 {/if}
 
 {#if promotionFormOpen}
-	<PromotionForm {supabase} {promotionFormOpen} {promotionEditTarget} formCallback={onFormCallback}/>
+	<PromotionForm {supabase} bind:promotionFormOpen={promotionFormOpen} {promotionEditTarget} formCallback={onFormCallback}/>
 {/if}

@@ -2,7 +2,7 @@
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 
-	export let modalClose: boolean;
+	export let modalOpen: boolean;
 </script>
 
 <div in:fade={{ duration: 500, easing: cubicInOut }}
@@ -19,7 +19,7 @@
 					<div class="bg-gray-50 py-3 flex flex-row-reverse px-6">
 						<slot name='modalButtons'>
 							<button type="button" class="inline-flex justify-center pt-1 ml-auto w-1/5 h-8 border-2 bg-transparent border-black hover:bg-black hover:text-white focus-visible:bg-black focus-visible:text-white text-black outline-none rounded-3xl transition ease-in-out duration-300"
-									on:click={() => modalClose = !modalClose}>Close
+									on:click={() => modalOpen = false}>Close
 							</button>
 						</slot>
 					</div>
