@@ -1,5 +1,4 @@
 # Installation
-___
 
 ### 1. Prerequisites
 - [NodeJS](https://nodejs.org/en/download) (Built with v18.17.1)
@@ -20,7 +19,6 @@ The Project needs some configuration to work correctly:
 Additionally, the required packages should be installed by executing `npm install` in the project directory.
 
 # Running the Application
-___
 
 ### 1. Development
 When running the application locally / in a development environment, it can be started with the `npm run dev` command.<br>
