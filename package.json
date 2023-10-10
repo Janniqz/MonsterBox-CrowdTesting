@@ -13,7 +13,7 @@
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.24.1",
 		"autoprefixer": "^10.4.15",
-		"postcss": "^8.4.29",
+		"postcss": "^8.4.31",
 		"supabase": "^1.93.0",
 		"svelte": "^4.2.0",
 		"svelte-check": "^3.5.1",
